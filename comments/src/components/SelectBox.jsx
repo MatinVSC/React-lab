@@ -4,7 +4,9 @@ function SelectBox() {
   const [query, SetQuery] = useState("");
   const [hasTopic, setHasTopic] = useState(false);
   const refInput = useRef();
-
+  const intervalRef = useRef();
+  const dataRef = useRef();
+  const [prevData, setPrevData] = useState([]);
 
   const closeStyle = {
     padding: 0,
@@ -12,8 +14,8 @@ function SelectBox() {
     overflow: "hidden",
   };
 
-  const handelChangeTopic = (e) => {
-    const value = e.target.value;
+  const handelChangeTopic = (event) => {
+    const {value} = event.target;
     SetQuery(value);
   };
 
@@ -23,19 +25,28 @@ function SelectBox() {
   };
 
 useEffect( () => {
-  async function fetchTopic () {
-    try {
-      const response = await fetch(`http://127.0.0.1:8000/?search=${query}`)
-      const data = await response.json()
-      setData(data.data.matchedTechs);
-    } catch (error) {
-      console.log(error);
-    }
+  const fetchTimeData = () => {
+    intervalRef.current = setTimeout( () => {
+      async function fetchTopic () {
+        try {
+          const response = await fetch(`http://127.0.0.1:8000/?search=${query}`)
+          const data = await response.json()
+          setData(data.data.matchedTechs);
+        } catch (error) {
+          console.log(error);
+        }
+      }
+      query.length && fetchTopic();
+      setPrevData(data)
+    }, 2000)
+  };
+  fetchTimeData()
+
+  return () => {
+    clearInterval(intervalRef.current);
   }
-  
-  fetchTopic()
-  
 }, [query]);
+
 
   return (
     <div className="c-box">

@@ -41,16 +41,13 @@ function Rate() {
       : { ...item, clicked: false};
     });
     setStar(clickStar);
-    
-    let rateObj = clickStar.filter(obj => obj.clicked === true);
-    setRating(rateObj[rateObj.length -1]);
 
     async function sendRating () {
       
       try {
         const res = await fetch(`http://localhost:8000/posts/`, 
           {method: "PATCH",
-            body: JSON.stringify({...rating, rate: rating.id})
+            body: JSON.stringify({id})
           }
         )
         const data = await res.json()
