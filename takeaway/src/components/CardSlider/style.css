@@ -1,0 +1,14 @@
+.slider-container {
+  display: flex;
+  overflow-x: auto;
+  white-space: nowrap;
+  padding: 20px;
+  scroll-snap-type: x mandatory;
+  overscroll-behavior-x: contain;
+}
+
+
+.slider-card {
+    /* scroll-snap-stop: normal; */
+    scroll-snap-align: start;
+}
